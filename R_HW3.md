@@ -14,6 +14,29 @@ country_metrics |>
 
 > 数据 → 过滤 → 选择列 → 变形 → 画图
 
+## group_by
+<img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
+group_by(Text1) 得到的结果将是
+A
+A1
+A2
+
+group_by(Text1， Text2) 得到的结果将是
+A B
+A B1
+A1 B
+A2 B2
+
+<img width="823" height="170" alt="image" src="https://github.com/user-attachments/assets/df5d4108-f34d-49fb-9b6c-79eca5df806c" />
+
+
+group_by(Text1， Text2, Text3) 得到的结果将是
+A B C
+A B1 C1
+A1 B C1
+A2 B2 C
+A B C2
+
 ## factor变量
 
 `factor` 是 R 用来表示“分类变量（categorical variable）”的特殊数据类型。
