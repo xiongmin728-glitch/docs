@@ -27,19 +27,16 @@ ggplot(longer_data)
 <img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
 group_by(Text1) 得到的结果将是
 
-| 结果 |
+| Text1 |
 | - |
 | A |
 | A1 |
 | A2 |
 
-| `is.na()`       | 是否缺失    |
-| `is.null()`     | 是否 NULL |
-| `is.finite()`   | 是否有限值   |
-| `is.infinite()` | 是否无限    |
-
 group_by(Text1， Text2) 得到的结果将是
 
+| Text1 | Text2 |
+| - | - |
 | A | B |
 | A | B1 |
 | A1 | B |
@@ -50,6 +47,8 @@ group_by(Text1， Text2) 得到的结果将是
 
 group_by(Text1， Text2, Text3) 得到的结果将是
 
+| Text1 | Text2 | Text3 |
+| - | - | - |
 | A | B | C |
 | A | B1 | C1 |
 | A1 | B | C1 |
