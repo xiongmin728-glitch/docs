@@ -271,7 +271,8 @@ skim(epa2021, comb_mpg, engine_displacement) # 只skim某几列
 
 <img width="1641" height="174" alt="image" src="https://github.com/user-attachments/assets/26a4bde1-477a-49a3-80fd-8284c264d387" />
 
-## NA 数据的处理
+## 数据的处理
+### NA 数据的处理
 如果保持 NA：
 - lm() 会自动删除这些行（listwise deletion）
 - 数据量减少
@@ -282,7 +283,7 @@ skim(epa2021, comb_mpg, engine_displacement) # 只skim某几列
 
 处理前需注意数据是否已经被转换成了factor，还是原始的character。因为转换方法是不一样的
 
-### convert-na-into-a-factor-level
+#### convert-na-into-a-factor-level
 ```
 library(forcats)
 
@@ -292,7 +293,7 @@ epa2021 <- epa2021 %>%
     car_truck = fct_recode(car_truck, NotSure = "??")
   )
 ```
-### replace-na-in-a-factor-column
+#### replace-na-in-a-factor-column
 ```
 library(forcats)
 
@@ -301,3 +302,5 @@ epa2021 <- epa2021 %>%
     car_truck = fct_recode(car_truck, NotSure = "??")
   )
 ```
+### 绝大部分都是数字，但同时存在少数字符串？
+### 某些数字过大？
