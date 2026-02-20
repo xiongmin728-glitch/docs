@@ -9,6 +9,15 @@ country_metrics |>
   pivot_longer(cols = -year) |>
   ggplot()
 ```
+filter的完整格式为：filter(.data, 条件1, 条件2, ...)
+select的完整格式为：select(.data, 列名1, 列名2, ...)
+因此上方代码块的分步写法为
+```
+filtered_metrics <- filter(country_metrics, region23 == "Northern America")
+selected_columns <- select(filtered_metrics, year, population)
+longer_data <- pivot_longer(selected_columns, cols = -year)
+ggplot(longer_data)
+```
 
 逻辑变成：可读性强
 
@@ -17,25 +26,25 @@ country_metrics |>
 ## group_by
 <img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
 group_by(Text1) 得到的结果将是
-A
-A1
-A2
+|A|
+|A1|
+|A2|
 
 group_by(Text1， Text2) 得到的结果将是
-A B
-A B1
-A1 B
-A2 B2
+|A| B|
+|A| B1|
+|A1| B|
+|A2| B2|
 
 <img width="823" height="170" alt="image" src="https://github.com/user-attachments/assets/df5d4108-f34d-49fb-9b6c-79eca5df806c" />
 
 
 group_by(Text1， Text2, Text3) 得到的结果将是
-A B C
-A B1 C1
-A1 B C1
-A2 B2 C
-A B C2
+|A |B| C|
+|A |B1 |C1|
+|A1| B |C1|
+|A2| B2| C|
+|A |B |C2|
 
 ## factor变量
 
@@ -44,7 +53,7 @@ A B C2
 它不是普通字符串，而是：带有“水平（levels）”结构的分类编码变量。
 
 ```
-gender <- c("Male", "Female", "Male", "Female")
+gender <- factor("Male", "Female", "Male", "Female")
 
 str(gender)
 Factor w/ 2 levels "Female","Male": 2 1 2 1
