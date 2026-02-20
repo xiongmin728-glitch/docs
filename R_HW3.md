@@ -224,8 +224,9 @@ skim(epa2021, comb_mpg, engine_displacement) # 只skim某几列
 | n_unique      | 类别数量    |
 | top_counts    | 出现最多的类别 |
 
-![](file:///Users/xiongmin/Data/Min/Documents/Technologies/Homework/R/images/skim1.png?msec=1771602785049)
+<img width="360" height="219" alt="image" src="https://github.com/user-attachments/assets/668764a3-94f1-4e1e-afb0-ac32513948fa" />
 
-![](file:///Users/xiongmin/Data/Min/Documents/Technologies/Homework/R/images/skim2.png?msec=1771602794161)
+<img width="1308" height="292" alt="image" src="https://github.com/user-attachments/assets/2b3522a5-7135-4090-86e0-b2d68c28397e" />
 
-![](file:///Users/xiongmin/Data/Min/Documents/Technologies/Homework/R/images/skim3.png?msec=1771602803103)
+<img width="1641" height="174" alt="image" src="https://github.com/user-attachments/assets/26a4bde1-477a-49a3-80fd-8284c264d387" />
+
