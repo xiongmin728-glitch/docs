@@ -26,25 +26,25 @@ ggplot(longer_data)
 ## group_by
 <img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
 group_by(Text1) 得到的结果将是
-|A|
-|A1|
-|A2|
+| A |
+| A1 |
+| A2 |
 
 group_by(Text1， Text2) 得到的结果将是
-|A| B|
-|A| B1|
-|A1| B|
-|A2| B2|
+| A | B |
+| A | B1 |
+| A1 | B |
+| A2 | B2 |
 
 <img width="823" height="170" alt="image" src="https://github.com/user-attachments/assets/df5d4108-f34d-49fb-9b6c-79eca5df806c" />
 
 
 group_by(Text1， Text2, Text3) 得到的结果将是
-|A |B| C|
-|A |B1 |C1|
-|A1| B |C1|
-|A2| B2| C|
-|A |B |C2|
+| A | B | C |
+| A | B1 | C1 |
+| A1 | B | C1 |
+| A2 | B2 | C |
+| A | B | C2 |
 
 ## factor变量
 
@@ -262,3 +262,33 @@ skim(epa2021, comb_mpg, engine_displacement) # 只skim某几列
 
 <img width="1641" height="174" alt="image" src="https://github.com/user-attachments/assets/26a4bde1-477a-49a3-80fd-8284c264d387" />
 
+## NA 数据的处理
+如果保持 NA：
+- lm() 会自动删除这些行（listwise deletion）
+- 数据量减少
+- 可能造成偏差
+如果改成一个 level（例如 "Missing" 或 "Unknown"）：
+- 保留数据
+- 把“缺失”当成一种类别
+
+处理前需注意数据是否已经被转换成了factor，还是原始的character。因为转换方法是不一样的
+
+### convert-na-into-a-factor-level
+```
+library(forcats)
+
+epa2021 <- epa2021 %>%
+  mutate(
+    car_truck = fct_na_value_to_level(car_truck, "Missing"),
+    car_truck = fct_recode(car_truck, NotSure = "??")
+  )
+```
+### replace-na-in-a-factor-column
+```
+library(forcats)
+
+epa2021 <- epa2021 %>%
+  mutate(
+    car_truck = fct_recode(car_truck, NotSure = "??")
+  )
+```
