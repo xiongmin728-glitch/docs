@@ -27,12 +27,12 @@ ggplot(longer_data)
 <img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
 group_by(Text1) 得到的结果将是
 
+| 结果 |
+| - |
 | A |
 | A1 |
 | A2 |
 
-| 函数              | 说明      |
-| --------------- | ------- |
 | `is.na()`       | 是否缺失    |
 | `is.null()`     | 是否 NULL |
 | `is.finite()`   | 是否有限值   |
