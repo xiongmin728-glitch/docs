@@ -30,6 +30,11 @@ group_by(Text1) 得到的结果将是
 | A1 |
 | A2 |
 
+| `is.na()`       | 是否缺失    |
+| `is.null()`     | 是否 NULL |
+| `is.finite()`   | 是否有限值   |
+| `is.infinite()` | 是否无限    |
+
 group_by(Text1， Text2) 得到的结果将是
 | A | B |
 | A | B1 |
