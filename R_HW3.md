@@ -304,3 +304,160 @@ epa2021 <- epa2021 %>%
 ```
 ### 绝大部分都是数字，但同时存在少数字符串？
 ### 某些数字过大？
+
+## 定义Function
+将代码细化为细小颗粒的功能组，是一个非常良好的代码习惯。优点有：
+1. 功能越简单，代码越容易实现。类似于拼积木
+2. 每个功能单独定义一个function，通过function名，就能大致知道他实现了什么。特别是在今后修改或维护时，甚至都不用进去细看每一行代码
+3. 特别是功能被反复调用时，修改这一处就可以改变所有调用者
+
+```
+ggplot(epa2021, aes(x = transmission, y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Transmission",
+    x = "Transmission",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+
+# We have done some data clean to set air_aspir_method NA data to Missing
+ggplot(epa2021, aes(x = air_aspir_method, y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Air Aspir Method",
+    x = "Air Aspir Method",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+
+# We have done some data clean to set car_truck NA data to Missing 
+ggplot(epa2021, aes(x = car_truck, y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Car Truck",
+    x = "Car Truck",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+
+# Class has 22 levels
+ggplot(epa2021, aes(x = class, y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Class",
+    x = "Class",
+    y = "Combined MPG"
+  ) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# engine_displacement is number type
+ggplot(epa2021, aes(x = factor(engine_displacement), y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Engine Displacement",
+    x = "Engine Displacement",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+
+# no_cylinders is int type
+ggplot(epa2021, aes(x = factor(no_cylinders), y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by No Cylinders",
+    x = "No Cylinders",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+```
+通过提取function后的代码结构
+```
+getAesBasedOnFactor <- function(x, isXFactor){
+  if (isXFactor){
+    return (aes(x = {{ x }}, y = comb_mpg))
+  }
+  
+  return (aes(x = factor({{ x }}), y = comb_mpg))
+}
+
+getThemeBasedOnRecordNumbers <- function(isXTooMany){
+  if (isXTooMany){
+    return (theme(axis.text.x = element_text(angle = 90, hjust = 1)))
+  }
+  
+  return (theme_minimal())
+}
+
+showBoxplot <- function(x, xName, isXFactor, isXTooMany){
+  ggplot(epa2021, getAesBasedOnFactor({{ x }} , isXFactor)) +
+  geom_boxplot() +
+  labs(
+    title = paste("Combined MPG by", xName),
+    x = paste0(xName),
+    y = "Combined MPG"
+  ) +
+  getThemeBasedOnRecordNumbers(isXTooMany)
+}
+
+showBoxplot(transmission, "Transmission", TRUE, FALSE)
+
+# We have done some data clean to set air_aspir_method NA data to Missing
+showBoxplot(air_aspir_method, "Air Aspir Method", TRUE, FALSE)
+
+# We have done some data clean to set car_truck NA data to Missing 
+showBoxplot(car_truck, "Car Truck", TRUE, FALSE)
+
+# Class has 22 levels
+showBoxplot(class, "Class", TRUE, TRUE)
+
+# engine_displacement is number type
+showBoxplot(engine_displacement, "Engine Displacement", FALSE, FALSE)
+
+# no_cylinders is int type
+showBoxplot(no_cylinders, "No Cylinders", FALSE, FALSE)
+```
+## geom_boxplot()
+```
+## 样例代码
+ggplot(epa2021, aes(x = engine_displacement, y = comb_mpg)) +
+  geom_boxplot() +
+  labs(
+    title = "Combined MPG by Engine Displacement",
+    x = "Engine Displacement",
+    y = "Combined MPG"
+  ) +
+  theme_minimal()
+```
+问题在于：
+engine_displacement 是 numeric， comb_mpg 是 numeric。 而 geom_boxplot() 的逻辑是：数值变量 ~ 分类变量
+但现在两个都是连续变量。ggplot 不知道：是按 x 分组？还是按 y 分组？
+所以给出警告：
+```
+Warning: Orientation is not uniquely specified when both the x and y aesthetics are continuous. Picking default orientation 'x'.
+Warning: Continuous x aesthetic ℹ did you forget `aes(group = ...)`?
+```
+<img width="741" height="434" alt="image" src="https://github.com/user-attachments/assets/1fe0a0af-aea4-48d1-b074-8fbd114a309f" />
+需要将engine_displacement改为factor： aes(x = factor(engine_displacement), y = comb_mpg)
+<img width="722" height="441" alt="image" src="https://github.com/user-attachments/assets/be300030-9224-495b-8ac7-cb918022385f" />
+
+## theme(), theme_minimal()
+theme_minimal() 是一个完整的“预设主题”。如碰到X轴值特别多会重叠在一起等特殊情况时，需要使用theme()来自定义，如修改：字体， 颜色， 网格线， 背景， 图例位置， 轴线等
+```
+theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+```
+<img width="719" height="440" alt="image" src="https://github.com/user-attachments/assets/c317c4f3-373b-4ca5-8de9-3a16fc95594a" />
+除了theme_minimal()外，还有其他预设主题如下：
+| 主题              | 特点    |
+| --------------- | ----- |
+| theme_gray()    | 默认主题  |
+| theme_minimal() | 极简风   |
+| theme_classic() | 经典论文风 |
+| theme_bw()      | 黑白主题  |
+| theme_void()    | 无轴无网格 |
+
+
+
+
