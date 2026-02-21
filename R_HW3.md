@@ -438,7 +438,9 @@ Warning: Orientation is not uniquely specified when both the x and y aesthetics 
 Warning: Continuous x aesthetic ℹ did you forget `aes(group = ...)`?
 ```
 <img width="741" height="434" alt="image" src="https://github.com/user-attachments/assets/1fe0a0af-aea4-48d1-b074-8fbd114a309f" />
+
 需要将engine_displacement改为factor： aes(x = factor(engine_displacement), y = comb_mpg)
+
 <img width="722" height="441" alt="image" src="https://github.com/user-attachments/assets/be300030-9224-495b-8ac7-cb918022385f" />
 
 ## theme(), theme_minimal()
@@ -449,7 +451,9 @@ theme(
   )
 ```
 <img width="719" height="440" alt="image" src="https://github.com/user-attachments/assets/c317c4f3-373b-4ca5-8de9-3a16fc95594a" />
+
 除了theme_minimal()外，还有其他预设主题如下：
+
 | 主题              | 特点    |
 | --------------- | ----- |
 | theme_gray()    | 默认主题  |
