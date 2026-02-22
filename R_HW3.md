@@ -289,18 +289,37 @@ library(forcats)
 
 epa2021 <- epa2021 %>%
   mutate(
-    car_truck = fct_na_value_to_level(car_truck, "Missing"),
-    car_truck = fct_recode(car_truck, NotSure = "??")
+    car_truck = fct_na_value_to_level(car_truck, "Missing")
   )
 ```
 #### replace-na-in-a-factor-column
 ```
 library(forcats)
 
+# 做法 A：直接用 fct_recode
 epa2021 <- epa2021 %>%
   mutate(
     car_truck = fct_recode(car_truck, NotSure = "??")
   )
+
+# 做法 B：先 na_if，再 fct_na_value_to_level
+epa2021 <- epa2021 %>%
+  mutate(
+    car_truck = na_if(car_truck, "??")
+    car_truck = fct_na_value_to_level(car_truck, "Missing")
+  )
+```
+两种做法最终的实际结果是一样的，但概念，或者说对"??"的理解则不一样。
+做法A，将"??"理解为一个合法类别，只不过名字不好听，改为一个恰当名字。
+做法B，将"??"理解为不合法数据，可能是录入错误等。所以先按照基本操作，将不合法数据改为NA，再将所有NA改为默认值
+数据清洗原则
+```
+错误值 → NA
+NA → 判断是否结构性缺失
+再决定是否：
+    - 删除
+    - 填补
+    - 转成 level
 ```
 ### 绝大部分都是数字，但同时存在少数字符串？
 ### 某些数字过大？
