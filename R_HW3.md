@@ -603,3 +603,34 @@ fct_lump(
 | `other_level` | character  | 合并后类别名称     | 默认 "Other" |
 | `ties.method` | character  | 并列处理方式      | 控制边界情况     |
 
+## Data partitioning
+将数据划分为训练集和测试集 - 为了评估模型在“未见过数据”上的泛化能力
+因为： 测试集数据在训练过程中“完全不可见”
+这模拟了真实世界场景：未来的数据是模型没见过的。
+
+| 比例        | 用途   |
+| --------- | ---- |
+| 70% / 30% | 常见   |
+| 80% / 20% | 数据量大 |
+| 60% / 40% | 数据少时 |
+
+```
+library(rsample)
+
+set.seed(123)
+
+split <- initial_split(data, prop = 0.8)
+
+train_data <- training(split)
+test_data  <- testing(split)
+```
+### set.seed(123)
+固定随机数生成器的起点，使结果可重复
+保证：
+- 每次训练集和测试集划分一样
+  
+否则：
+- 每次运行都会不同
+- 模型结果变化
+
+123只是个数字，可以是任意数字
