@@ -635,3 +635,53 @@ test_data  <- testing(split)
 - 模型结果变化
 
 123只是个数字，可以是任意数字
+
+## Null model
+```
+# Create a linear regression object with the default mode and engine
+epa2021_lm0 <- linear_reg()
+
+# Using the overall mean as our null model is equivalent to fitting a model with just a y-intercept
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+  fit(comb_mpg ~ 1, data = epa2021_train)
+```
+<img width="525" height="305" alt="image" src="https://github.com/user-attachments/assets/a66a4bc2-23c6-488f-8374-9611ab79b6c9" />
+
+```
+# y-intercept
+coef(epa2021_lm0_fit$fit)
+# 因变量comb_mpg在训练集中的均值
+mean(epa2021_train$comb_mpg, na.rm = TRUE)
+```
+## tidy()
+<img width="1315" height="157" alt="image" src="https://github.com/user-attachments/assets/aa89c00c-aaea-4e9c-a261-e3318e784551" />
+
+| 列名          | 含义    | 数学意义             |
+| ----------- | ----- | ---------------- |
+| `term`      | 变量名称  | 系数对应变量           |
+| `estimate`  | 系数估计值 | (\hat{\beta})    |
+| `std.error` | 标准误   | 系数不确定性           |
+| `statistic` | t 值   | (\hat{\beta}/SE) |
+| `p.value`   | p 值   | 显著性检验            |
+
+## glance() 
+<img width="1301" height="113" alt="image" src="https://github.com/user-attachments/assets/93954c16-257f-4f9e-b5cf-dd7d50b38472" />
+
+| 字段              | 含义       | 数学定义 / 解释                     | 如何解读          |
+| --------------- | -------- | ----------------------------- | ------------- |
+| `r.squared`     | 决定系数     | ( R^2 = 1 - \frac{SSE}{SST} ) | 越接近 1 说明解释力越强 |
+| `adj.r.squared` | 调整后 R²   | 对变量个数进行惩罚                     | 用于模型比较，更稳健    |
+| `sigma`         | 残差标准误    | ( \sqrt{SSE/df} )             | 预测误差的平均波动大小   |
+| `statistic`     | F 统计量    | 模型整体显著性检验                     | 越大说明模型越显著     |
+| `p.value`       | F 检验 p 值 | 检验所有系数是否为 0                   | <0.05 通常认为显著  |
+| `df`            | 模型自由度    | 自变量个数                         | 解释变量数量        |
+| `df.residual`   | 残差自由度    | ( n - p - 1 )                 | 样本量减去参数数      |
+| `logLik`        | 对数似然     | ( \log L )                    | 用于 AIC/BIC    |
+| `AIC`           | 赤池信息准则   | ( -2\log L + 2k )             | 越小越好          |
+| `BIC`           | 贝叶斯信息准则  | ( -2\log L + k\log n )        | 惩罚更强，越小越好     |
+| `deviance`      | 残差平方和    | ( SSE )                       | 模型未解释的误差      |
+| `nobs`          | 样本量      | 观测数量                          | 用于确认数据规模      |
+
+
+
