@@ -283,6 +283,21 @@ skim(epa2021, comb_mpg, engine_displacement) # 只skim某几列
 
 处理前需注意数据是否已经被转换成了factor，还是原始的character。因为转换方法是不一样的
 
+| 函数                        | 所属包     | 作用对象   |
+| ------------------------- | ------- | ------ |
+| `fct_recode()`            | forcats | factor |
+| `fct_na_value_to_level()` | forcats | factor |
+| `na_if()`                 | dplyr   | 向量     |
+| `replace_na()`            | tidyr   | 向量     |
+```
+Error in `mutate()`:
+ℹ In argument: `car_truck = na_if(car_truck, "??")`.
+Caused by error in `na_if()`:
+! Can't convert from `y` <character> to `x` <factor<b5ce7>> due to loss of generality.
+• Locations: 1
+Run `rlang::last_trace()` to see where the error occurred.
+```
+
 #### convert-na-into-a-factor-level
 ```
 library(forcats)
@@ -305,7 +320,7 @@ epa2021 <- epa2021 %>%
 # 做法 B：先 na_if，再 fct_na_value_to_level
 epa2021 <- epa2021 %>%
   mutate(
-    car_truck = na_if(car_truck, "??")
+    car_truck = fct_recode(car_truck, NULL = "??"),
     car_truck = fct_na_value_to_level(car_truck, "Missing")
   )
 ```
