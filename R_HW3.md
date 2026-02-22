@@ -685,24 +685,25 @@ mean(epa2021_train$comb_mpg, na.rm = TRUE)
 
 ## 线性回归
 
-
 <img width="534" height="79" alt="image" src="https://github.com/user-attachments/assets/53fe83c7-1828-4624-859e-86c05e774efd" />
 
+用一个或多个自变量 𝑋 来预测连续因变量 Y 的统计模型。 用一条“直线”去拟合数据。
 
-| 术语                 | 符号          | 含义         | 如何理解             |
-| ------------------ | ----------- | ---------- | ---------------- |
-| Fitted Model       | —           | 已经训练好的回归模型 | 用数据估计出系数         |
-| Intercept          | ( \beta_0 ) | 截距         | 当所有 X=0 时的预测值    |
-| Coefficient        | ( \beta_i ) | 回归系数       | X 增加 1 单位，Y 改变多少 |
-| R²                 | ( R^2 )     | 决定系数       | 模型解释的变异比例        |
-| Adjusted R²        | —           | 调整后的 R²    | 惩罚变量过多           |
-| RMSE               | —           | 均方根误差      | 预测误差的平均大小        |
-| MSE                | —           | 均方误差       | 误差平方的平均          |
-| MAE                | —           | 平均绝对误差     | 更稳健的误差指标         |
-| Residual Std Error | ( \sigma )  | 残差标准误      | 误差波动程度           |
-| F-statistic        | —           | 整体显著性检验    | 模型是否整体有效         |
-| p-value            | —           | 显著性概率      | 是否拒绝原假设          |
-| AIC                | —           | 信息准则       | 模型比较，越小越好        |
-| BIC                | —           | 信息准则       | 惩罚更强             |
+Y=β0​+β1​X1​+β2​X2​+⋯+βp​Xp​+ϵ
+
+| 符号         | 含义   |
+| ---------- | ---- |
+| (Y)        | 因变量  |
+| (X)        | 自变量  |
+| (\beta_0)  | 截距   |
+| (\beta_1)  | 回归系数 |
+| (\epsilon) | 误差项  |
+
+<img width="586" height="268" alt="image" src="https://github.com/user-attachments/assets/4add258a-d9e5-4c61-b2ef-c71a1131b7fd" />
+
+<img width="644" height="454" alt="image" src="https://github.com/user-attachments/assets/1924e708-5826-4a84-afdd-7294a4fafc20" />
+
+<img width="799" height="408" alt="image" src="https://github.com/user-attachments/assets/2d0a24d3-d242-4b53-8027-1e25bf8b574b" />
+
 
 
