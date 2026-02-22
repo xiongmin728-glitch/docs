@@ -496,6 +496,58 @@ theme(
 | theme_bw()      | 黑白主题  |
 | theme_void()    | 无轴无网格 |
 
+## Correlation
+相关性本质是在回答：两个连续变量之间是否存在“线性关系”？
 
+如果两个变量高度相关（>0.8）那这两个变量不能同时进线性回归，否则：
+ - 系数不稳定
+ - 标准误变大
+ - p 值失真
+
+| r 值  | 含义      |
+| ---- | ------- |
+| 1    | 完全正线性关系 |
+| 0.8  | 强正相关    |
+| 0.5  | 中等相关    |
+| 0.2  | 弱相关     |
+| 0    | 无线性关系   |
+| -0.8 | 强负相关    |
+| -1   | 完全负线性关系 |
+
+<img width="548" height="302" alt="image" src="https://github.com/user-attachments/assets/9db6a9dc-ffd5-471c-a4ca-a62cc557e4cb" />
+所以在做线性回归分析时，通常会只保留强相关的某一个参数用于分析
+
+只能计算 numeric 变量之间的相关性
+<img width="506" height="156" alt="image" src="https://github.com/user-attachments/assets/d80cd442-0406-4d79-ab44-d8217bfd777f" />
+相关性分析只是了解下变量之间是否存在线性相关，并不是只有通过相关性分析的变量才能做线性回归分析，所以并不能说factor不能用于做线性回归分析
+
+```
+# Select numeric variables, since correlation can be computed only between them
+numeric_data <- epa2021 %>%
+  select(where(is.numeric))
+
+# Used use = "complete.obs" to remove NA data, even we have transferred them at above, but used here one more time just in case
+cor_matrix <- cor(numeric_data, use = "complete.obs")
+
+# View correlation
+corrplot(
+  cor_matrix,
+  method = "color",
+  type = "upper",
+  tl.col = "black",
+  tl.cex = 0.8
+)
+```
+| 参数                | 作用        |
+| ----------------- | --------- |
+| method = "color"  | 用颜色表示相关系数 |
+| method = "circle" | 用圆形表示     |
+| type = "upper"    | 只显示上三角    |
+| tl.col            | 标签颜色      |
+| tl.cex            | 标签大小      |
+| addCoef.col = "black"          | 相关系数数字颜色      |
+| number.cex = 0.7            | 相关系数数字标签大小      |
+
+<img width="543" height="449" alt="image" src="https://github.com/user-attachments/assets/e1ff4ea9-a1e3-4144-9ced-a59bb236bea0" />
 
 
