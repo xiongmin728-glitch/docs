@@ -705,5 +705,89 @@ Y=β0​+β1​X1​+β2​X2​+⋯+βp​Xp​+ϵ
 
 <img width="799" height="408" alt="image" src="https://github.com/user-attachments/assets/2d0a24d3-d242-4b53-8027-1e25bf8b574b" />
 
+### 模型定义
+#### 1. 定义模型类型
+```
+epa2021_lm1 <- linear_reg()
+```
 
+#### 2. 指定变量
+```
+# Null 模型， 只有截距 Y^=β0
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+  fit(comb_mpg ~ 1, data = epa2021_train)
 
+# 单变量 - 一条直线 Y^=β0​+β1​X1
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+    fit(comb_mpg ~ engine_displacement, data = epa2021_train)​
+
+# 多变量 - 多维平面 Y^=β0​+β1​X1​+β2​X2
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+    fit(comb_mpg ~ x1 + x2, data = epa2021_train)
+
+# 所有变量 .表示除了因变量外的所有变量 Y^=β0​+β1​X1​+β2​X2​+。。。
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+    fit(comb_mpg ~ ., data = epa2021_train)
+
+```
+#### 3. 验证模型
+##### mean absolute error (MAE)
+
+<img width="591" height="159" alt="image" src="https://github.com/user-attachments/assets/82315b39-30dc-4071-93fe-5368f4bc5b5a" />
+
+###### yardstick
+
+```
+# 1️⃣ 得到训练集预测值（null model）
+epa2021_lm0_fitted_vals <- 
+  predict(epa2021_lm0_fit, new_data = epa2021_train)
+
+# 2️⃣ 合并真实值和预测值
+results_train_lm0 <- data.frame(
+  actual = epa2021_train$comb_mpg,
+  .pred  = epa2021_lm0_fitted_vals$.pred
+)
+
+# 3️⃣ 计算 MAE
+epa2021_train_lm0_mae <- 
+  yardstick::mae(
+    results_train_lm0,
+    truth = actual,
+    estimate = .pred
+  )
+
+# 4️⃣ 打印结果
+sprintf(
+  'lm0: train : MAE = %.1f mpg',
+  epa2021_train_lm0_mae$.estimate
+)
+```
+###### MLmetrics
+
+```
+MLmetrics::MAE(results_train_lm0$actual, results_train_lm0$.pred)
+```
+##### RMSE
+```
+yardstick::rmse(
+  results_train_lm0,
+  truth = actual,
+  estimate = .pred
+)
+```
+## 如何确认调用的方法来源于哪个包
+```
+> find("fit")
+[1] "package:workflows" "package:tailor"    "package:parsnip"   "package:infer"    
+> find("predict")
+[1] "package:stats"
+> find("select")
+[1] "package:dplyr"
+> find("mae")
+[1] "package:yardstick"
+> 
+```
