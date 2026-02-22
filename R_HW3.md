@@ -685,6 +685,7 @@ mean(epa2021_train$comb_mpg, na.rm = TRUE)
 
 ## 线性回归
 
+<img width="534" height="79" alt="image" src="https://github.com/user-attachments/assets/53fe83c7-1828-4624-859e-86c05e774efd" />
 
 | 术语                 | 符号          | 含义         | 如何理解             |
 | ------------------ | ----------- | ---------- | ---------------- |
