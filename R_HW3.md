@@ -550,4 +550,56 @@ corrplot(
 
 <img width="543" height="449" alt="image" src="https://github.com/user-attachments/assets/e1ff4ea9-a1e3-4144-9ced-a59bb236bea0" />
 
+## lumping - Factor recoding
+典型的 低频类别合并（rare category lumping），在建模前非常常见 - 将某个变量如（transmission_speed）样本数 < 某个数，就合并成 "Other"
+为什么要做 lump？
+- 避免 dummy 变量过多
+- 避免样本太小类别导致不稳定
+- 提高模型泛化能力
+  
+### fct_lump_min
+```
+epa2021$transmission_lump <- epa2021 |>
+  mutate(
+    transmission_lump = fct_lump_min(
+      transmission_speed,
+      min = 50, # 样本数量小于50的处理，大于50的保留
+      other_level = "Other"
+    )
+  )
+
+epa2021$transmission_lump 
+```
+<img width="1318" height="354" alt="image" src="https://github.com/user-attachments/assets/ff3135f2-4c45-49d3-8a34-3eb49d95a526" />
+### fct_lump_***
+
+| 函数                   | 控制方式    | 保留规则        | 典型用途    |
+| -------------------- | ------- | ----------- | ------- |
+| `fct_lump()`         | 通用接口    | 通过参数选择      | 旧版本统一入口 |
+| `fct_lump_min()`     | 最小样本数   | 保留 n ≥ min  | 按频数阈值   |
+| `fct_lump_n()`       | 保留前 n 个 | 保留最常见 n 个   | 限制类别数量  |
+| `fct_lump_prop()`    | 比例阈值    | 保留占比 ≥ prop | 按比例控制   |
+| `fct_lump_lowfreq()` | 只保留最常见  | 仅最大频数保留     | 极端简化    |
+| `fct_other()`        | 手动指定    | 只保留指定类别     | 精确控制    |
+
+#### fct_lump
+```
+fct_lump(
+  f,
+  n = NULL,
+  prop = NULL,
+  w = NULL,
+  other_level = "Other",
+  ties.method = c("min", "average", "first", "random", "max")
+)
+```
+
+| 参数            | 类型         | 作用          | 说明         |
+| ------------- | ---------- | ----------- | ---------- |
+| `f`           | factor     | 要处理的因子变量    | 必填         |
+| `n`           | integer    | 保留前 n 个类别   | 按频数排序      |
+| `prop`        | numeric    | 保留比例 ≥ prop | 0–1        |
+| `w`           | numeric 向量 | 权重          | 用于加权频数     |
+| `other_level` | character  | 合并后类别名称     | 默认 "Other" |
+| `ties.method` | character  | 并列处理方式      | 控制边界情况     |
 
