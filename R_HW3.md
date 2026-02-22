@@ -603,6 +603,7 @@ fct_lump(
 | `other_level` | character  | 合并后类别名称     | 默认 "Other" |
 | `ties.method` | character  | 并列处理方式      | 控制边界情况     |
 
+
 ## Data partitioning
 将数据划分为训练集和测试集 - 为了评估模型在“未见过数据”上的泛化能力
 因为： 测试集数据在训练过程中“完全不可见”
