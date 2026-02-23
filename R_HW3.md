@@ -156,6 +156,7 @@ NA's   : 15
 5. 是否有明显数据错误？
 
 ## dplyr::mutate_if
+对满足某个条件的列，统一应用某个函数进行转换
 
 ```
 epa2021 <- epa2021 %>% mutate_if(is.character, as.factor)
