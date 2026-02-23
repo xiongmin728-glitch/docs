@@ -733,6 +733,11 @@ epa2021_lm0_fit <-
   epa2021_lm0 %>% 
     fit(comb_mpg ~ ., data = epa2021_train)
 
+# 所有变量 .表示除了因变量外的所有变量，并排出某些相关变量 Y^=β0​+β1​X1​+β2​X2​+。。。
+epa2021_lm0_fit <- 
+  epa2021_lm0 %>% 
+    fit(comb_mpg ~ . - mfr_code - model_yr, data = epa2021_train)
+
 ```
 #### 3. 验证模型
 
