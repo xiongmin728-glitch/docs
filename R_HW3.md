@@ -796,6 +796,22 @@ yardstick::rmse(
   estimate = .pred
 )
 ```
+
+#### 4. 通过散点图看预测值和真实值的关系
+
+```
+results_test_lm %>%
+  ggplot( aes(x = actual, y = pred)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_abline(intercept = 0, slope = 1, 
+              color = "red", linetype = "dashed") +
+  labs(
+    title = "Actual vs Predicted",
+    x = "Actual MPG",
+    y = "Predicted MPG"
+  ) +
+  theme_minimal()
+```
 ## 如何确认调用的方法来源于哪个包
 ```
 > find("fit")
