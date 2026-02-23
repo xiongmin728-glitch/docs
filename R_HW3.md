@@ -24,6 +24,7 @@ ggplot(longer_data)
 > 数据 → 过滤 → 选择列 → 变形 → 画图
 
 ## group_by
+
 <img width="276" height="138" alt="image" src="https://github.com/user-attachments/assets/094e6efd-ff4c-4a0a-a1eb-aa3b380c54ed" />
 group_by(Text1) 得到的结果将是
 
@@ -54,6 +55,17 @@ group_by(Text1， Text2, Text3) 得到的结果将是
 | A1 | B | C1 |
 | A2 | B2 | C |
 | A | B | C2 |
+
+```
+epa2021 %>% 
+   group_by(air_aspir_method) %>% # why do we need to use group_by??
+   summarise(
+    total = n(),
+    missing = sum(is.na(air_aspir_method)),
+    missing_rate = mean(is.na(air_aspir_method))
+  )
+```
+<img width="1085" height="200" alt="image" src="https://github.com/user-attachments/assets/b7ee208d-7003-444b-b6f0-09d236947827" />
 
 ## factor变量
 
