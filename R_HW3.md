@@ -1036,8 +1036,13 @@ predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
 > 
 ```
 ## K-fold Cross Validation
+交叉验证只用于确定哪种建模方式是最优的，然后使用该方式在训练集上建模，在训练集上建立的模型用于测试集的验证和后续的预测
 
 <img width="686" height="899" alt="image" src="https://github.com/user-attachments/assets/462fd1b6-e51b-4b72-bf5d-d1a33771004f" />
+
+<img width="836" height="824" alt="image" src="https://github.com/user-attachments/assets/3447b992-da97-4c02-89da-916ac8dd168a" />
+
+<img width="846" height="890" alt="image" src="https://github.com/user-attachments/assets/1055d073-bc72-480d-8932-2a57776c79c2" />
 
 
 ## 报错
