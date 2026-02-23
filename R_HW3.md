@@ -1035,6 +1035,10 @@ predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
 [1] "package:yardstick"
 > 
 ```
+## K-fold Cross Validation
+
+<img width="686" height="899" alt="image" src="https://github.com/user-attachments/assets/462fd1b6-e51b-4b72-bf5d-d1a33771004f" />
+
 
 ## 报错
 ### 数据只在测试集有而训练集没有
