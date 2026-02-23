@@ -729,7 +729,43 @@ Y=β0​+β1​X1​+β2​X2​+⋯+βp​Xp​+ϵ
 epa2021_lm1 <- linear_reg()
 ```
 
-#### 2. 指定变量
+#### 2. 指定变量 - 生成模型
+
+| 维度     | lm()     | fit()                  |
+| ------ | -------- | ---------------------- |
+| 来源     | base R   | 框架方法                   |
+| 作用     | 直接拟合线性模型 | 统一建模接口                 |
+| 支持模型   | 线性模型     | 多种模型                   |
+| 可扩展性   | 低        | 高                      |
+| 机器学习流程 | 无        | 可接 recipe / resampling |
+| 交叉验证   | 需手动      | 内建支持                   |
+
+
+##### fit()
+fit() 不是基础 R 函数, 它是某些框架里的 S3 泛型方法
+常见来源：
+- parsnip::fit()（tidymodels）
+- keras::fit()
+- caret::train()（类似思想）
+- 自定义模型类
+
+###### tidymodels
+
+```
+library(parsnip)
+model_spec <- linear_reg() %>%
+  # 默认为(lmstats::lm），可选项有： "glmnet"（正则化）； "stan"（贝叶斯）； "spark"（Spark ML）
+  set_engine("lm")
+
+fit_model <- model_spec %>%
+  fit(mpg ~ hp + wt, data = mtcars)
+
+```
+工作机制
+- 定义模型类型（linear_reg）
+- 指定引擎（lm / glmnet 等）
+- 使用统一的 fit() 接口拟合
+- 
 ```
 # Null 模型， 只有截距 Y^=β0
 epa2021_lm0_fit <- 
@@ -757,6 +793,111 @@ epa2021_lm0_fit <-
     fit(comb_mpg ~ . - mfr_code - model_yr, data = epa2021_train)
 
 ```
+
+##### lm()
+
+```
+# =========================
+# 1️⃣ 数据准备
+# =========================
+set.seed(123)
+
+data <- mtcars
+
+# 70% 训练集 / 30% 测试集
+train_index <- sample(seq_len(nrow(data)), size = 0.7 * nrow(data))
+
+train_data <- data[train_index, ]
+test_data  <- data[-train_index, ]
+
+
+# =========================
+# 2️⃣ 建立线性回归模型
+# =========================
+model <- lm(mpg ~ hp + wt, data = train_data)
+
+
+# 查看模型摘要
+summary(model)
+
+
+# =========================
+# 3️⃣ 训练集预测
+# =========================
+train_pred <- predict(model, newdata = train_data)
+
+
+# =========================
+# 4️⃣ 测试集预测
+# =========================
+test_pred <- predict(model, newdata = test_data)
+
+
+# =========================
+# 5️⃣ 模型评估指标
+# =========================
+
+# --- 计算 RMSE ---
+rmse <- function(actual, predicted) {
+  sqrt(mean((actual - predicted)^2))
+}
+
+# --- 计算 MAE ---
+mae <- function(actual, predicted) {
+  mean(abs(actual - predicted))
+}
+
+# --- 计算 R² ---
+r2 <- function(actual, predicted) {
+  1 - sum((actual - predicted)^2) / sum((actual - mean(actual))^2)
+}
+
+# 训练集指标
+cat("Train RMSE:", rmse(train_data$mpg, train_pred), "\n")
+cat("Train MAE :", mae(train_data$mpg, train_pred), "\n")
+cat("Train R2  :", r2(train_data$mpg, train_pred), "\n\n")
+
+# 测试集指标
+cat("Test RMSE:", rmse(test_data$mpg, test_pred), "\n")
+cat("Test MAE :", mae(test_data$mpg, test_pred), "\n")
+cat("Test R2  :", r2(test_data$mpg, test_pred), "\n")
+
+
+# =========================
+# 6️⃣ 残差诊断
+# =========================
+
+# 残差图
+par(mfrow = c(2, 2))
+plot(model)
+
+```
+使用yardstick计算mae
+```
+library(yardstick)
+library(dplyr)
+
+# 建模
+set.seed(123)
+train_index <- sample(seq_len(nrow(mtcars)), size = 0.7 * nrow(mtcars))
+train_data <- mtcars[train_index, ]
+test_data  <- mtcars[-train_index, ]
+
+model <- lm(mpg ~ hp + wt, data = train_data)
+
+# 预测
+test_pred <- predict(model, newdata = test_data)
+
+# 构造评估数据框
+results <- tibble(
+  truth = test_data$mpg,
+  estimate = test_pred
+)
+
+# 计算 MAE
+yardstick::mae(results, truth = truth, estimate = estimate)
+```
+
 #### 3. 验证模型
 
 | 指标          | 公式                                        | 单位         | 特点    | 什么时候用  |    |        |
