@@ -898,7 +898,7 @@ results <- tibble(
 yardstick::mae(results, truth = truth, estimate = estimate)
 ```
 
-#### 3. 验证模型
+#### 3. 模型评估
 
 | 指标          | 公式                                        | 单位         | 特点    | 什么时候用  |    |        |
 | ----------- | ----------------------------------------- | ---------- | ----- | ------ | -- | ------ |
@@ -914,6 +914,13 @@ yardstick::mae(results, truth = truth, estimate = estimate)
 ##### mean absolute error (MAE)
 
 <img width="591" height="159" alt="image" src="https://github.com/user-attachments/assets/82315b39-30dc-4071-93fe-5368f4bc5b5a" />
+
+```
+# --- 计算 MAE ---
+mae <- function(actual, predicted) {
+  mean(abs(actual - predicted))
+}
+```
 
 ###### yardstick
 
@@ -949,11 +956,24 @@ MLmetrics::MAE(results_train_lm0$actual, results_train_lm0$.pred)
 ```
 ##### RMSE
 ```
+# --- 计算 RMSE ---
+rmse <- function(actual, predicted) {
+  sqrt(mean((actual - predicted)^2))
+}
+```
+```
 yardstick::rmse(
   results_train_lm0,
   truth = actual,
   estimate = .pred
 )
+```
+##### R2
+```
+# --- 计算 R² ---
+r2 <- function(actual, predicted) {
+  1 - sum((actual - predicted)^2) / sum((actual - mean(actual))^2)
+}
 ```
 
 #### 4. 通过散点图看预测值和真实值的关系
