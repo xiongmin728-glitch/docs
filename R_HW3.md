@@ -101,6 +101,11 @@ income = β0 + β1 * genderF
 # 所以要将gender通过factor分类化，做乘法的是Female对应的R分类后的数字
 ```
 
+```
+# 将源数据中所有非factor列转化为factor
+epa2021 <- epa2021 %>% mutate_if(is.character, as.factor)
+```
+
 ## str(epa2021_raw)
 
 主要是观察哪些变量是数值，哪些变量需要factor后才能被用于建模
@@ -827,6 +832,35 @@ results_test_lm %>%
 ```
 
 <img width="709" height="448" alt="image" src="https://github.com/user-attachments/assets/b2deb336-aa3d-401e-9334-5ba9de551c6a" />
+
+#### 5. 通过模型做预测
+
+```
+library(recipes)
+library(workflows)
+
+rec <- recipe(comb_mpg ~ ., data = epa2021_train) %>%
+  step_rm(transmission_lump) %>%
+  step_rm(class_lump) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_dummy(all_nominal_predictors())
+
+wf <- workflow() %>%
+  add_model(linear_reg()) %>%
+  add_recipe(rec)
+
+fit_all_original_vars <- fit(wf, data = epa2021_train)
+
+pred_test_data <- read.csv("epa2021_test_pred.csv")
+
+pred_test_data <- pred_test_data %>% mutate_if(is.character, as.factor)
+predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
+```
+
+<img width="557" height="211" alt="image" src="https://github.com/user-attachments/assets/0fcd158e-f96f-4dea-b110-98805e4a5f81" />
+
+<img width="597" height="115" alt="image" src="https://github.com/user-attachments/assets/5d36edf3-3491-44db-b6fb-2fe8fa9581be" />
+
 
 ## 如何确认调用的方法来源于哪个包
 ```
