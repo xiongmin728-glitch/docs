@@ -812,6 +812,9 @@ results_test_lm %>%
   ) +
   theme_minimal()
 ```
+
+<img width="709" height="448" alt="image" src="https://github.com/user-attachments/assets/b2deb336-aa3d-401e-9334-5ba9de551c6a" />
+
 ## 如何确认调用的方法来源于哪个包
 ```
 > find("fit")
