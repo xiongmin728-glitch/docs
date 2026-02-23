@@ -808,3 +808,29 @@ yardstick::rmse(
 [1] "package:yardstick"
 > 
 ```
+
+## 报错
+### 数据只在测试集有而训练集没有
+```
+Error in model.frame.default(Terms, newdata, na.action = na.action, xlev = object$xlevels) :
+factor transmission_speed has new levels Auto(AM-S9)
+```
+解决办法： 使用 recipe + step_novel()
+```
+library(recipes)
+library(workflows)
+library(parsnip)
+
+rec <- recipe(comb_mpg ~ ., data = epa2021_train) %>%
+  step_rm(mfr_code, model_yr, division) %>%   # 删除变量
+  step_novel(all_nominal_predictors()) %>%  # 处理新 levels
+  step_dummy(all_nominal_predictors())      # 生成 dummy
+
+wf <- workflow() %>%
+  add_model(linear_reg()) %>%
+  add_recipe(rec)
+
+fit_wf <- fit(wf, data = epa2021_train)
+
+predict(fit_wf, new_data = epa2021_test)
+```
