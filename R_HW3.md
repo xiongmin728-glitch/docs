@@ -1044,6 +1044,84 @@ predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
 
 <img width="846" height="890" alt="image" src="https://github.com/user-attachments/assets/1055d073-bc72-480d-8932-2a57776c79c2" />
 
+```
+set.seed(123)
+
+cv_folds <- vfold_cv(epa2021_train, v = 5)
+# cv_folds
+
+model_spec <- 
+  linear_reg() %>% 
+  set_engine("lm")
+
+wf_1 <- 
+  workflow() %>%
+  add_model(model_spec) %>%
+  add_formula(comb_mpg ~ engine_displacement + no_cylinders)
+
+wf_2 <- 
+  workflow() %>%
+  add_model(model_spec) %>%
+  add_formula(comb_mpg ~ . - transmission_lump - class_lump)
+
+wf_3 <- 
+  workflow() %>%
+  add_model(model_spec) %>%
+  add_formula(comb_mpg ~ . - transmission - class)
+
+results_1 <- 
+  wf_1 %>%
+  fit_resamples(
+    resamples = cv_folds,
+    metrics = metric_set(rmse, mae, rsq),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+results_2 <- 
+  wf_2 %>%
+  fit_resamples(
+    resamples = cv_folds,
+    metrics = metric_set(rmse, mae, rsq),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+results_3 <- 
+  wf_3 %>%
+  fit_resamples(
+    resamples = cv_folds,
+    metrics = metric_set(rmse, mae, rsq),
+    control = control_resamples(save_pred = TRUE)
+  )
+
+collect_metrics(results_1)
+collect_metrics(results_2)
+collect_metrics(results_3)
+
+# compared with three results, the second one looks better, its mae is the smallest one, so we should choose the second solution
+
+# Then use {r lm_all_original_vars} to create model
+library(recipes)
+library(workflows)
+
+rec <- recipe(comb_mpg ~ ., data = epa2021_train) %>%
+  step_rm(transmission_lump) %>%
+  step_rm(class_lump) %>%
+  step_novel(all_nominal_predictors()) %>%
+  step_dummy(all_nominal_predictors())
+
+wf <- workflow() %>%
+  add_model(linear_reg()) %>%
+  add_recipe(rec)
+
+fit_all_original_vars <- fit(wf, data = epa2021_train)
+
+pred_test_data <- read.csv("epa2021_test_pred.csv")
+
+pred_test_data <- pred_test_data %>% mutate_if(is.character, as.factor)
+predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
+```
+<img width="969" height="137" alt="image" src="https://github.com/user-attachments/assets/e8f0a6ff-4aaf-438a-bc85-7d72e910a75f" />
+
 
 ## 报错
 ### 数据只在测试集有而训练集没有
