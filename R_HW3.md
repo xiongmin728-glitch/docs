@@ -1015,7 +1015,7 @@ fit_all_original_vars <- fit(wf, data = epa2021_train)
 pred_test_data <- read.csv("epa2021_test_pred.csv")
 
 pred_test_data <- pred_test_data %>% mutate_if(is.character, as.factor)
-predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
+predict(fit_all_original_vars, new_data = pred_test_data)
 ```
 
 <img width="557" height="211" alt="image" src="https://github.com/user-attachments/assets/0fcd158e-f96f-4dea-b110-98805e4a5f81" />
@@ -1104,8 +1104,8 @@ library(recipes)
 library(workflows)
 
 rec <- recipe(comb_mpg ~ ., data = epa2021_train) %>%
-  step_rm(transmission_lump) %>%
-  step_rm(class_lump) %>%
+  step_rm(transmission) %>%
+  step_rm(class) %>%
   step_novel(all_nominal_predictors()) %>%
   step_dummy(all_nominal_predictors())
 
@@ -1118,7 +1118,7 @@ fit_all_original_vars <- fit(wf, data = epa2021_train)
 pred_test_data <- read.csv("epa2021_test_pred.csv")
 
 pred_test_data <- pred_test_data %>% mutate_if(is.character, as.factor)
-predict(fit_engine_displacement_no_cylinders, new_data = pred_test_data)
+predict(fit_all_original_vars, new_data = pred_test_data)
 ```
 <img width="969" height="137" alt="image" src="https://github.com/user-attachments/assets/e8f0a6ff-4aaf-438a-bc85-7d72e910a75f" />
 
