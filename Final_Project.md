@@ -22,4 +22,5 @@ Tell us the why and how of what you are doing as well as your interpretation of 
 You want others to be able to learn from your work both in the sense of better understanding of the dataset but also how to go about doing a similar analysis.
 
 # Design
-以HW5中的房价走势为例
+<img width="637" height="569" alt="5d02d7dbdfb2c125a89fdd76d075882c" src="https://github.com/user-attachments/assets/243dd6c5-8bd2-4a52-8bc8-8e83dc87998e" />
+
